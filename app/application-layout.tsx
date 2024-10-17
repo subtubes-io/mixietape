@@ -61,7 +61,7 @@ function ApplicationLayout({ children }: { children: React.ReactNode }) {
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
                   <Avatar
-                    src="/users/edgar.jpeg"
+                    src="/assets/icon.png"
                     className="size-10"
                     square
                     alt=""

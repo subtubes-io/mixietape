@@ -5,6 +5,9 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channels = 'ipc-example';
 
 const electronHandler = {
+  getAssetPath: (fileName: string) =>
+    ipcRenderer.sendSync('get-asset-path', fileName),
+
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);

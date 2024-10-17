@@ -34,24 +34,11 @@ export const D3BarChart = function () {
 
   useEffect(() => {
     const width = 1000;
-    const height = 300;
-    const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+    const height = 350;
+    const margin = { top: 20, right: 30, bottom: 60, left: 60 };
 
-    // Create a tooltip div element
-    const tooltip = d3
-      .select('body')
-      .append('div')
-      .style('position', 'absolute')
-      .style('background-color', 'black')
-      .style('padding', '5px')
-      .style('color', 'white')
-      .style('border-radius', '5px')
-      .style('display', 'none')
-      .style('pointer-events', 'none');
-
-    // Select the SVG and clear previous content
     const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
+    svg.selectAll('*').remove(); // Clear previous content
 
     // Create scales
     const xScale = d3
@@ -66,6 +53,19 @@ export const D3BarChart = function () {
       .nice()
       .range([height - margin.bottom, margin.top]);
 
+    // Create a tooltip
+    const tooltip = d3
+      .select('body')
+      .append('div')
+      .style('position', 'absolute')
+      .style('background-color', 'rgba(0, 0, 0, 0.75)')
+      .style('padding', '8px')
+      .style('color', 'white')
+      .style('border-radius', '4px')
+      .style('font-size', '12px')
+      .style('display', 'none')
+      .style('pointer-events', 'none');
+
     // Append X axis
     svg
       .append('g')
@@ -74,7 +74,9 @@ export const D3BarChart = function () {
       .selectAll('text')
       .style('color', 'white')
       .attr('transform', 'rotate(-45)')
-      .style('text-anchor', 'end');
+      .style('text-anchor', 'end')
+      .attr('dx', '-0.8em')
+      .attr('dy', '0.15em'); // Translate the text labels slightly upwards
 
     // Append Y axis
     svg
@@ -82,7 +84,7 @@ export const D3BarChart = function () {
       .attr('transform', `translate(${margin.left},0)`)
       .call(d3.axisLeft(yScale));
 
-    // Create bars with tooltip functionality
+    // Create bars with tooltip
     svg
       .selectAll('.bar')
       .data(partitions)
@@ -113,8 +115,8 @@ export const D3BarChart = function () {
       .on('mouseout', () => {
         tooltip.style('display', 'none');
       });
-
-    // Cleanup the tooltip when the component unmounts
+    svg.selectAll('text').style('color', 'white').style('font-size', '12px');
+    // Cleanup tooltips when component unmounts
     return () => {
       tooltip.remove();
     };
@@ -124,12 +126,11 @@ export const D3BarChart = function () {
     <>
       {loading && !error && <Loader />}
       {!loading && error && <ErrorMessage message={error} />}
-
       {!loading && !error && (
         <svg
           ref={svgRef}
-          width={1000}
-          height={300}
+          style={{ width: '100%', height: '500px' }}
+          viewBox="0 0 1000 350"
           preserveAspectRatio="xMidYMid meet"
         />
       )}
