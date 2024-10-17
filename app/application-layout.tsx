@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid';
+import { ChevronUpIcon } from '@heroicons/react/16/solid'; // ChevronDownIcon,
 import { Avatar } from '@/components/catalyst/avatar';
 import { Dropdown, DropdownButton } from '@/components/catalyst/dropdown';
 import {
@@ -16,6 +16,7 @@ import {
   SidebarItem,
   SidebarLabel,
   SidebarSpacer,
+  SidebarSection,
 } from '@/components/catalyst/sidebar';
 import { SidebarLayout } from '@/components/catalyst/sidebar-layout';
 
@@ -40,13 +41,18 @@ function ApplicationLayout({ children }: { children: React.ReactNode }) {
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 {/* <Avatar src="/teams/catalyst.svg" /> */}
-                <SidebarLabel>Demo</SidebarLabel>
-                <ChevronDownIcon />
+
+                <SidebarLabel>MixieTape</SidebarLabel>
+                {/* <ChevronDownIcon /> */}
               </DropdownButton>
             </Dropdown>
           </SidebarHeader>
 
           <SidebarBody>
+            <SidebarSection>
+              <SidebarItem to="/">Home</SidebarItem>
+              <SidebarItem to="/projects">Projects</SidebarItem>
+            </SidebarSection>
             <SidebarSpacer />
           </SidebarBody>
 
@@ -65,7 +71,7 @@ function ApplicationLayout({ children }: { children: React.ReactNode }) {
                       Edgar
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      edgar@subtubes.com
+                      edgar@mixietape.com
                     </span>
                   </span>
                 </span>

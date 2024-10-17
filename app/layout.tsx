@@ -1,15 +1,14 @@
-import "@/styles/tailwind.css";
-import type { Metadata } from "next";
-import type React from "react";
-import { ApplicationLayout } from "./application-layout";
-import Toast from "@/components/custom/Toast";
+import '@/styles/tailwind.css';
+import type React from 'react';
+import { ApplicationLayout } from './application-layout';
+import Toast from '@/components/custom/Toast';
 
 export const metadata: Metadata = {
   title: {
-    template: "%s - Dashboard",
-    default: "Dashboard",
+    template: '%s - Dashboard',
+    default: 'Dashboard',
   },
-  description: "",
+  description: '',
 };
 
 export default async function RootLayout({

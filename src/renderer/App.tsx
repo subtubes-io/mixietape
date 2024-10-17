@@ -8,15 +8,17 @@ import ProjectPage from '@/app/projects/ProjectPage';
 
 export default function App() {
   return (
-    <ApplicationLayout>
+    <>
       <Toast />
       <Router>
-        <Routes>
-          <Route path="/" element={<HomeDashboard />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/:id" element={<ProjectPage />} />
-        </Routes>
+        <ApplicationLayout>
+          <Routes>
+            <Route path="/" element={<HomeDashboard />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects/:id" element={<ProjectPage />} />
+          </Routes>
+        </ApplicationLayout>
       </Router>
-    </ApplicationLayout>
+    </>
   );
 }

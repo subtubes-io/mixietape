@@ -1,5 +1,3 @@
-'use client';
-
 import * as Headless from '@headlessui/react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -124,7 +122,7 @@ export function SidebarHeading({
   );
 }
 
-export const SidebarItem = forwardRef(function SidebarItem(
+export const SidebarItem = forwardRef(function SidebarItemFn(
   {
     current,
     className,
@@ -166,7 +164,7 @@ export const SidebarItem = forwardRef(function SidebarItem(
           className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-zinc-950 dark:bg-white"
         />
       )}
-      {'href' in props ? (
+      {'to' in props ? (
         <Headless.CloseButton as={Fragment} ref={ref}>
           <Link
             className={classes}
