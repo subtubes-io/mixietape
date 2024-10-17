@@ -1,19 +1,17 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { TriggerRepository } from "@/repositories/TriggerRepository";
-import type { Trigger } from "@/repositories/TriggerRepository";
-import { SettingsPanel } from "./SettingsPanel";
+import { useEffect, useState, Fragment } from 'react';
+import { TriggerRepository } from '@/repositories/TriggerRepository';
+import type { Trigger } from '@/repositories/TriggerRepository';
+import SettingsPanel from '@/components/tables/SettingsPanel';
 import {
   Dialog,
   Transition,
   DialogPanel,
   TransitionChild,
-} from "@headlessui/react";
-import { Fragment } from "react";
+} from '@headlessui/react';
+import Loader from '@/components/Loader';
+import ErrorMessage from '@/components/ErrorMessage';
 
-interface TriggersTableProps {}
-
-const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
+function TruncatedText({ text }: { text: string }) {
   const [isOpen, setIsOpen] = useState(false); // State to control modal open/close
 
   const openModal = () => setIsOpen(true);
@@ -21,7 +19,11 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
 
   return (
     <>
-      <button onClick={openModal} className="text-blue-600 hover:underline">
+      <button
+        onClick={openModal}
+        className="text-blue-600 hover:underline"
+        type="button"
+      >
         Open Query
       </button>
 
@@ -80,9 +82,9 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
       </Transition>
     </>
   );
-};
+}
 
-export const TriggersTable: React.FC<TriggersTableProps> = () => {
+export default function TriggersTable() {
   const [triggers, setTriggers] = useState<Trigger[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,7 +97,7 @@ export const TriggersTable: React.FC<TriggersTableProps> = () => {
         setTriggers(data);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch triggers.");
+        setError('Failed to fetch triggers.');
       } finally {
         setLoading(false);
       }
@@ -106,63 +108,69 @@ export const TriggersTable: React.FC<TriggersTableProps> = () => {
   }, []);
 
   const handleFormSubmit = (tableName: string, isRegex: boolean) => {
-    console.log("Table Name:", tableName);
-    console.log("Is Regex:", isRegex);
+    console.log('Table Name:', tableName);
+    console.log('Is Regex:', isRegex);
   };
 
   return (
     <>
+      {loading && !error && <Loader />}
+      {!loading && error && <ErrorMessage message={error} />}
+
       <SettingsPanel onSubmit={handleFormSubmit} />
-      <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
-        <thead className="text-zinc-500 dark:text-zinc-400">
-          <tr>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Trigger Name
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Function Name
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Trigger Type
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Event
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Level
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Function Definition
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {triggers.map((row, index) => (
-            <tr key={`row-${index}`} className="dark:hover:bg-gray-700">
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.triggername}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.functionname}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.triggertype}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.event.filter((e) => e !== null).join(", ")}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.level}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                <TruncatedText text={row.functiondefinition} />
-              </td>
+      {!loading && !error && (
+        <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
+          <thead className="text-zinc-500 dark:text-zinc-400">
+            <tr>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Trigger Name
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Function Name
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Trigger Type
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Event
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Level
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Function Definition
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {triggers.map((row) => (
+              <tr
+                key={`row-${row.functionname}`}
+                className="dark:hover:bg-gray-700"
+              >
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.triggername}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.functionname}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.triggertype}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.event.filter((e) => e !== null).join(', ')}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.level}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  <TruncatedText text={row.functiondefinition} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
-};
-
-export default TriggersTable;
+}

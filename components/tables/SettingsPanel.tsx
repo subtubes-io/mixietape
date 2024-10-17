@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-} from "@headlessui/react";
-import { AnimatePresence, motion } from "framer-motion";
-import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
-import { SettingsForm } from "./Settings";
+} from '@headlessui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AdjustmentsVerticalIcon } from '@heroicons/react/24/solid';
+import SettingsForm from './Settings';
 
 interface SettingsPanelProps {
   onSubmit: (tableName: string, isRegex: boolean) => void;
 }
 
-export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onSubmit }) => {
+export default function SettingsPanel({ onSubmit }: SettingsPanelProps) {
   return (
     <Disclosure>
       {({ open }) => (
@@ -29,9 +29,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onSubmit }) => {
                 static
                 as={motion.div}
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+                animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
                 className="overflow-hidden"
               >
                 <div className="p-4 bg-zinc-200 dark:bg-zinc-800 rounded-md">
@@ -47,4 +47,4 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onSubmit }) => {
       )}
     </Disclosure>
   );
-};
+}

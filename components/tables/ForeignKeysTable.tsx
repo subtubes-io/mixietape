@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import type { ForeignKey } from '@/repositories/ForeignKeyRefRepository';
 import { ForeignKeyRefRepository } from '@/repositories/ForeignKeyRefRepository';
-import { SettingsPanel } from './SettingsPanel';
-
-interface ForeignKeyTableProps {}
+import Loader from '@/components/Loader';
+import ErrorMessage from '@/components/ErrorMessage';
+import SettingsPanel from '@/components/tables/SettingsPanel';
 
 export default function ForeignKeyTable() {
   const [foreignKeys, setForeignKeys] = useState<ForeignKey[]>([]);
@@ -35,46 +35,52 @@ export default function ForeignKeyTable() {
   };
   return (
     <>
+      {loading && !error && <Loader />}
+      {!loading && error && <ErrorMessage message={error} />}
       <SettingsPanel onSubmit={handleFormSubmit} />
-      <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
-        <thead className="text-zinc-500 dark:text-zinc-400">
-          <tr>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Reference Table
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Constraint Name
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Referencing Table
-            </th>
-            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
-              Referencing Column
-            </th>
-            {/* <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+      {!loading && !error && (
+        <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
+          <thead className="text-zinc-500 dark:text-zinc-400">
+            <tr>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Reference Table
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Constraint Name
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Referencing Table
+              </th>
+              <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+                Referencing Column
+              </th>
+              {/* <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
             <span className="sr-only">Status</span>
           </th>
           <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
             <span className="sr-only">Actions</span>
           </th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {foreignKeys.map((row, index) => (
-            <tr key={`row-${index}`} className="dark:hover:bg-gray-700">
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.referencedtable}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.constraintname}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.referencingtable}
-              </td>
-              <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-                {row.referencingcolumn}
-              </td>
-              {/* <td className="text-zinc-500 relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+            </tr>
+          </thead>
+          <tbody>
+            {foreignKeys.map((row) => (
+              <tr
+                key={`row-${row.constraintname}`}
+                className="dark:hover:bg-gray-700"
+              >
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.referencedtable}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.constraintname}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.referencingtable}
+                </td>
+                <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+                  {row.referencingcolumn}
+                </td>
+                {/* <td className="text-zinc-500 relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
               <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm/5 font-medium sm:text-xs/5 bg-lime-400/20 text-lime-700 dark:bg-lime-400/10 dark:text-lime-300">
                 Success
               </span>
@@ -96,11 +102,12 @@ export default function ForeignKeyTable() {
                 </svg>
               </button>
             </td> */}
-            </tr>
-          ))}
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
+              </tr>
+            ))}
+            {/* Add more rows as needed */}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

@@ -11,19 +11,19 @@ export default function ProjectPage() {
   return (
     <>
       <SidePanel />
-      <ComponentModule title={'Table Partition'}>
+      <ComponentModule title="Table Partition">
         <D3BarChart />
       </ComponentModule>
       <Divider />
-      <ComponentModule title={'Table Indexes'}>
+      <ComponentModule title="Table Indexes">
         <IndexesTable />
       </ComponentModule>
 
-      <ComponentModule title={'Table Foreign Key Constraints (Fuzzy)'}>
+      <ComponentModule title="Table Foreign Key Constraints (Fuzzy)">
         <ForeignKeyTable />
       </ComponentModule>
 
-      <ComponentModule title={'Table Associated Triggers (Fuzzy)'}>
+      <ComponentModule title="Table Associated Triggers (Fuzzy)">
         <TriggersTable />
       </ComponentModule>
     </>

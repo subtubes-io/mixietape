@@ -1,17 +1,14 @@
-"use client";
+import { useEffect, useState, useRef } from 'react';
+import * as d3 from 'd3';
+import Loader from '@/components/Loader';
+import ErrorMessage from '@/components/ErrorMessage';
 
-import React, { useEffect, useState, useRef } from "react";
-import * as d3 from "d3";
+import { PartitionRepository } from '@/repositories/PartitionRepository';
 
-import { PartitionRepository } from "@/repositories/PartitionRepository";
+import type { Partition } from '@/repositories/PartitionRepository';
 
-import type { Partition } from "@/repositories/PartitionRepository";
-
-interface D3BarChartProps {
-  // data: Partition[];
-}
-
-export const D3BarChart: React.FC<D3BarChartProps> = () => {
+// eslint-disable-next-line import/prefer-default-export
+export const D3BarChart = function () {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [partitions, setPartitions] = useState<Partition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,7 +23,7 @@ export const D3BarChart: React.FC<D3BarChartProps> = () => {
         setPartitions(data);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch partitions.");
+        setError('Failed to fetch partitions.');
       } finally {
         setLoading(false);
       }
@@ -43,18 +40,19 @@ export const D3BarChart: React.FC<D3BarChartProps> = () => {
 
     // Create a tooltip div element
     const tooltip = d3
-      .select("body")
-      .append("div")
-      .style("position", "absolute")
-      .style("background-color", "black")
-      .style("padding", "5px")
-      .style("border-radius", "5px")
-      .style("display", "none")
-      .style("pointer-events", "none");
+      .select('body')
+      .append('div')
+      .style('position', 'absolute')
+      .style('background-color', 'black')
+      .style('padding', '5px')
+      .style('color', 'white')
+      .style('border-radius', '5px')
+      .style('display', 'none')
+      .style('pointer-events', 'none');
 
     // Select the SVG and clear previous content
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();
+    svg.selectAll('*').remove();
 
     // Create scales
     const xScale = d3
@@ -71,50 +69,51 @@ export const D3BarChart: React.FC<D3BarChartProps> = () => {
 
     // Append X axis
     svg
-      .append("g")
-      .attr("transform", `translate(0,${height - margin.bottom})`)
+      .append('g')
+      .attr('transform', `translate(0,${height - margin.bottom})`)
       .call(d3.axisBottom(xScale))
-      .selectAll("text")
-      .attr("transform", "rotate(-45)")
-      .style("text-anchor", "end");
+      .selectAll('text')
+      .style('color', 'white')
+      .attr('transform', 'rotate(-45)')
+      .style('text-anchor', 'end');
 
     // Append Y axis
     svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},0)`)
+      .append('g')
+      .attr('transform', `translate(${margin.left},0)`)
       .call(d3.axisLeft(yScale));
 
     // Create bars with tooltip functionality
     svg
-      .selectAll(".bar")
+      .selectAll('.bar')
       .data(partitions)
-      .join("rect")
-      .attr("class", "bar")
-      .attr("x", (d) => xScale(d.tablename)!)
-      .attr("y", (d) => yScale(d.rowcount))
-      .attr("width", xScale.bandwidth())
-      .attr("height", (d) => height - margin.bottom - yScale(d.rowcount))
-      .attr("fill", "rgba(128 232 255)")
-      .on("mouseover", (event, d) => {
+      .join('rect')
+      .attr('class', 'bar')
+      .attr('x', (d) => xScale(d.tablename)!)
+      .attr('y', (d) => yScale(d.rowcount))
+      .attr('width', xScale.bandwidth())
+      .attr('height', (d) => height - margin.bottom - yScale(d.rowcount))
+      .attr('fill', 'rgba(128 232 255)')
+      .on('mouseover', (event, d) => {
         console.log(d);
         tooltip
-          .style("display", "block")
+          .style('display', 'block')
           .html(
             `<strong>Partition:</strong> ${d.tablename}<br/>
              <strong>Parent Table:</strong> ${d.parenttable}<br/>
              <strong>Size:</strong> ${d.tablesize}<br/>
-             <strong>Rows:</strong> ${d.rowcount}`
+             <strong>Rows:</strong> ${d.rowcount}`,
           )
-          .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 28}px`);
+          .style('left', `${event.pageX + 10}px`)
+          .style('top', `${event.pageY - 28}px`);
       })
-      .on("mousemove", (event) => {
+      .on('mousemove', (event) => {
         tooltip
-          .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 28}px`);
+          .style('left', `${event.pageX + 10}px`)
+          .style('top', `${event.pageY - 28}px`);
       })
-      .on("mouseout", () => {
-        tooltip.style("display", "none");
+      .on('mouseout', () => {
+        tooltip.style('display', 'none');
       });
 
     // Cleanup the tooltip when the component unmounts
@@ -124,11 +123,18 @@ export const D3BarChart: React.FC<D3BarChartProps> = () => {
   }, [partitions]);
 
   return (
-    <svg
-      ref={svgRef}
-      width={1000}
-      height={300}
-      preserveAspectRatio="xMidYMid meet"
-    />
+    <>
+      {loading && !error && <Loader />}
+      {!loading && error && <ErrorMessage message={error} />}
+
+      {!loading && !error && (
+        <svg
+          ref={svgRef}
+          width={1000}
+          height={300}
+          preserveAspectRatio="xMidYMid meet"
+        />
+      )}
+    </>
   );
 };

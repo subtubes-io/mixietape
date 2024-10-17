@@ -1,1 +1,1 @@
-export { D3BarChart } from "./D3BarChart";
+export * from '@/components/charts/D3BarChart';
