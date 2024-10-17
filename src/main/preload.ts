@@ -7,7 +7,6 @@ export type Channels = 'ipc-example';
 const electronHandler = {
   getAssetPath: (fileName: string) =>
     ipcRenderer.sendSync('get-asset-path', fileName),
-
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
@@ -25,6 +24,7 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  selectFile: () => ipcRenderer.invoke('select-file'),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
