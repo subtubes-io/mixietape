@@ -20,27 +20,30 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
       onSubmit={handleSubmit}
       className="space-y-4 transition-all duration-700 ease-in-out"
     >
+      {/* Row for Table Name Input */}
       <div className="flex items-center space-x-4">
-        {/* Table Name Input */}
-        <div className="w-full">
-          <label
-            htmlFor="tableName"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Table Name
-          </label>
-          <input
-            type="text"
-            id="tableName"
-            value={tableName}
-            onChange={(e) => setTableName(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm bg-white dark:bg-zinc-700 dark:text-white transition-all duration-700 ease-in-out"
-            placeholder="Enter table name"
-          />
-        </div>
+        <label
+          htmlFor="tableName"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4"
+        >
+          Table Name
+        </label>
+        <input
+          type="text"
+          id="tableName"
+          value={tableName}
+          onChange={(e) => setTableName(e.target.value)}
+          className="block w-3/4 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm bg-white dark:bg-zinc-700 dark:text-white transition-all duration-700 ease-in-out"
+          placeholder="Enter table name"
+        />
+      </div>
 
-        {/* Toggle Switch for "Is Regex" */}
-        <div className="flex items-center space-x-2">
+      {/* Row for "Use Regex" Toggle */}
+      <div className="flex items-center space-x-4">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4">
+          Use Regex
+        </label>
+        <div className="flex items-center space-x-2 w-3/4">
           <Switch
             checked={isRegex}
             onChange={setIsRegex}
@@ -61,12 +64,14 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="mt-2 text-sm bg-cyan-500 dark:bg-cyan-300 text-black px-2 py-2 rounded hover:bg-cyan-400 dark:hover:bg-cyan-500"
-      >
-        Submit
-      </button>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="mt-2 text-sm bg-cyan-500 dark:bg-cyan-300 text-black px-4 py-2 rounded hover:bg-cyan-400 dark:hover:bg-cyan-500"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 }

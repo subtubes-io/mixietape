@@ -35,8 +35,6 @@ export default function SettingsPanel({ onSubmit }: SettingsPanelProps) {
                 className="overflow-hidden"
               >
                 <div className="p-4 bg-zinc-200 dark:bg-zinc-800 rounded-md">
-                  <h2 className="text-xl font-bold mb-2">Settings</h2>
-
                   {/* SettingsForm Component */}
                   <SettingsForm onSubmit={onSubmit} />
                 </div>

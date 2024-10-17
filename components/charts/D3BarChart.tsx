@@ -22,7 +22,6 @@ export const D3BarChart = function () {
         const data = await partitionRepo.getPartitions();
         setPartitions(data);
       } catch (err) {
-        console.error(err);
         setError('Failed to fetch partitions.');
       } finally {
         setLoading(false);
@@ -95,7 +94,6 @@ export const D3BarChart = function () {
       .attr('height', (d) => height - margin.bottom - yScale(d.rowcount))
       .attr('fill', 'rgba(128 232 255)')
       .on('mouseover', (event, d) => {
-        console.log(d);
         tooltip
           .style('display', 'block')
           .html(
