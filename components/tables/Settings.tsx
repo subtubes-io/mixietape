@@ -41,7 +41,7 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
       {/* Row for "Use Regex" Toggle */}
       <div className="flex items-center space-x-4">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4">
-          Use Regex
+          Use SQL LIKE Statetment
         </label>
         <div className="flex items-center space-x-2 w-3/4">
           <Switch
@@ -58,7 +58,7 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
             />
           </Switch>
           <span className="text-sm text-gray-700 dark:text-gray-300">
-            Use Regex
+            Use SQL LIKE Statetment
           </span>
         </div>
       </div>
