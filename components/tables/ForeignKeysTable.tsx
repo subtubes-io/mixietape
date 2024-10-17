@@ -1,13 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import type { ForeignKey } from "@/repositories/ForeignKeyRefRepository";
-import { ForeignKeyRefRepository } from "@/repositories/ForeignKeyRefRepository";
-import { SettingsPanel } from "./SettingsPanel";
+import type { ForeignKey } from '@/repositories/ForeignKeyRefRepository';
+import { ForeignKeyRefRepository } from '@/repositories/ForeignKeyRefRepository';
+import { SettingsPanel } from './SettingsPanel';
 
 interface ForeignKeyTableProps {}
 
-export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
+export default function ForeignKeyTable() {
   const [foreignKeys, setForeignKeys] = useState<ForeignKey[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +19,7 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
         setForeignKeys(data);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch foreign keys.");
+        setError('Failed to fetch foreign keys.');
       } finally {
         setLoading(false);
       }
@@ -31,8 +30,8 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
   }, []);
 
   const handleFormSubmit = (tableName: string, isRegex: boolean) => {
-    console.log("Table Name:", tableName);
-    console.log("Is Regex:", isRegex);
+    console.log('Table Name:', tableName);
+    console.log('Is Regex:', isRegex);
   };
   return (
     <>
@@ -104,6 +103,4 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
       </table>
     </>
   );
-};
-
-export default ForeignKeyTable;
+}

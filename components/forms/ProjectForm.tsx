@@ -1,6 +1,6 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 // Define the form values interface
 interface NewProjectFormValues {
@@ -11,8 +11,8 @@ interface NewProjectFormValues {
 
 // Validation schema for form fields
 const validationSchema = Yup.object({
-  name: Yup.string().required("Project name is required"),
-  description: Yup.string().required("Project description is required"),
+  name: Yup.string().required('Project name is required'),
+  description: Yup.string().required('Project description is required'),
   settings: Yup.string().strip(), //Yup.string().required("Settings are required"),
 });
 
@@ -22,9 +22,9 @@ interface NewProjectFormProps {
 
 const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSubmit }) => {
   const initialValues: NewProjectFormValues = {
-    name: "",
-    description: "",
-    settings: "",
+    name: '',
+    description: '',
+    settings: '',
   };
 
   return (
@@ -90,7 +90,7 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSubmit }) => {
             disabled={isSubmitting}
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
           >
-            {isSubmitting ? "Creating..." : "Create Project"}
+            {isSubmitting ? 'Creating...' : 'Save'}
           </button>
         </Form>
       )}

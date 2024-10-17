@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ProjectsRepository } from '@/repositories/ProjectsRepository';
 import type { Project } from '@/repositories/ProjectsRepository';
-import { ProjectsTable } from '@/components/tables/ProjectsTable';
+import ProjectsTable from '@/components/tables/ProjectsTable';
 import ModalDialog from '@/components/Dialog';
 import NewProjectForm from '@/components/forms/ProjectForm';
 
-function HomeDashboard(): React.FC {
+export default function HomeDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,16 +54,16 @@ function HomeDashboard(): React.FC {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
+          className="bg-cyan-500 text-white py-2 px-4 rounded-lg hover:bg-cyan-600 dark:bg-cyan-400 dark:hover:bg-cyan-500"
         >
-          Create New Project
+          New Project
         </button>
       </header>
 
       <ModalDialog
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Create New Project"
+        title="New Project"
       >
         <NewProjectForm onSubmit={handleNewProjectSubmit} />
       </ModalDialog>
@@ -83,10 +83,8 @@ function HomeDashboard(): React.FC {
         <h2 className="text-2xl font-bold text-zinc-950 dark:text-white mb-4">
           Recent Projects
         </h2>
-        {/* <ProjectsTable /> */}
+        <ProjectsTable />
       </section>
     </div>
   );
 }
-
-export default HomeDashboard;
