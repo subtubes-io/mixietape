@@ -30,7 +30,7 @@ ipcMain.handle('select-file', async () => {
   return null;
 });
 
-const getBaseNameWithoutAllExtensions = (filePath) => {
+const getBaseNameWithoutAllExtensions = (filePath: string) => {
   return path.basename(filePath).replace(/(\.[^/.]+)+$/, '');
 };
 
@@ -38,15 +38,9 @@ const getBaseNameWithoutAllExtensions = (filePath) => {
 ipcMain.handle(
   'upload-and-extract',
   async (event, filePath: string, destination: string) => {
-    console.log('File path:', filePath);
-    console.log('Destination:', destination);
-
     // Use the function to get the correct base name
     const baseName = getBaseNameWithoutAllExtensions(filePath);
-    console.log('Base name:', baseName);
-
     const targetPath = path.join(destination, baseName);
-    console.log('Target path:', targetPath);
 
     try {
       // Ensure targetPath exists
@@ -59,16 +53,16 @@ ipcMain.handle(
         file: filePath,
         cwd: targetPath,
       });
-      console.log('Extraction complete');
+
       return { targetPath };
-    } catch (err) {
-      console.error('Extraction error:', err);
+    } catch (err: unknown) {
       throw new Error(`Extraction failed: ${err.message}`);
     }
   },
 );
 
 if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line global-require
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
@@ -77,10 +71,12 @@ const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
+  // eslint-disable-next-line global-require
   require('electron-debug')();
 }
 
 const installExtensions = async () => {
+  // eslint-disable-next-line global-require
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS'];
@@ -169,7 +165,14 @@ app
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+      if (mainWindow === null) {
+        createWindow();
+      }
+      return null;
     });
+
+    return null;
   })
-  .catch(console.log);
+  .catch((err) => {
+    console.log(`Error: ${err.message}`);
+  });
