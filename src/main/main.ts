@@ -1,14 +1,6 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
-
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import path from 'path';
+import * as tar from 'tar';
+import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -25,16 +17,11 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
+// Handle file selection and extraction in the main process
 ipcMain.handle('select-file', async () => {
-  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+  const { filePaths } = await dialog.showOpenDialog(mainWindow!, {
     properties: ['openFile'],
-    filters: [{ name: 'JavaScript Files', extensions: ['js'] }],
+    filters: [{ name: 'Tar Files', extensions: ['tar', 'gz', 'tar.gz'] }],
   });
 
   if (filePaths && filePaths.length > 0) {
@@ -42,6 +29,44 @@ ipcMain.handle('select-file', async () => {
   }
   return null;
 });
+
+const getBaseNameWithoutAllExtensions = (filePath) => {
+  return path.basename(filePath).replace(/(\.[^/.]+)+$/, '');
+};
+
+// In your ipcMain handler
+ipcMain.handle(
+  'upload-and-extract',
+  async (event, filePath: string, destination: string) => {
+    console.log('File path:', filePath);
+    console.log('Destination:', destination);
+
+    // Use the function to get the correct base name
+    const baseName = getBaseNameWithoutAllExtensions(filePath);
+    console.log('Base name:', baseName);
+
+    const targetPath = path.join(destination, baseName);
+    console.log('Target path:', targetPath);
+
+    try {
+      // Ensure targetPath exists
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
+
+      // Extract the tar file to the destination
+      await tar.x({
+        file: filePath,
+        cwd: targetPath,
+      });
+      console.log('Extraction complete');
+      return { targetPath };
+    } catch (err) {
+      console.error('Extraction error:', err);
+      throw new Error(`Extraction failed: ${err.message}`);
+    }
+  },
+);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -62,7 +87,7 @@ const installExtensions = async () => {
 
   return installer
     .default(
-      extensions.map((name) => installer[name]),
+      extensions.map((name: any) => installer[name]),
       forceDownload,
     )
     .catch(console.log);
@@ -90,6 +115,7 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      contextIsolation: true,
     },
   });
 

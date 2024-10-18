@@ -25,6 +25,9 @@ const electronHandler = {
     },
   },
   selectFile: () => ipcRenderer.invoke('select-file'),
+
+  uploadAndExtract: (filePath: string, destination: string) =>
+    ipcRenderer.invoke('upload-and-extract', filePath, destination),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

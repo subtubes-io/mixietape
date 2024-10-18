@@ -4,6 +4,7 @@ import type { Project } from '@/repositories/ProjectsRepository';
 import ProjectsTable from '@/components/tables/ProjectsTable';
 import ModalDialog from '@/components/Dialog';
 import NewProjectForm from '@/components/forms/ProjectForm';
+import DynamicComponentLoader from '@/components/extensions/DynamicLoader';
 
 export default function HomeDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -76,6 +77,15 @@ export default function HomeDashboard() {
           <p className="mt-1 text-3xl font-bold text-zinc-950 dark:text-white">
             {projects.length}
           </p>
+        </div>
+      </section>
+
+      <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-zinc-800 shadow rounded-lg p-4">
+          <h2 className="text-xl font-semibold text-zinc-950 dark:text-white">
+            Dynamic Loader
+          </h2>
+          <DynamicComponentLoader />
         </div>
       </section>
 
