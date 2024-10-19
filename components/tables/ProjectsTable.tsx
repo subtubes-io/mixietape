@@ -4,6 +4,14 @@ import type { Project } from '@/repositories/ProjectsRepository';
 import { Link } from 'react-router-dom';
 import Loader from '@/components/Loader';
 import ErrorMessage from '@/components/ErrorMessage';
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownMenu,
+  DropdownItem,
+} from '@/components/catalyst/dropdown';
+
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 export default function ProjectsTable() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -31,6 +39,29 @@ export default function ProjectsTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onDelete = async (id: string) => {
+    try {
+      // Fetch the projects using the repository
+      await projectsRepository.deleteProject(id);
+    } catch (err) {
+      // setError('Failed to delete projects');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelect = async (item) => {
+    const value = item.target.value;
+    switch (value) {
+      case 'delete':
+        await onDelete(item.target.dataset.id);
+        break;
+      default:
+        // foo
+        break;
+    }
+  };
+
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p>{error}</p>;
 
@@ -51,9 +82,9 @@ export default function ProjectsTable() {
             <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium">
               Description
             </th>
-            {/* <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium">
-              Settings
-            </th> */}
+            <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -70,9 +101,23 @@ export default function ProjectsTable() {
               <td className="relative px-4 border-b border-zinc-950/5 dark:border-white/5 py-4">
                 {project.description}
               </td>
-              {/* <td className="relative px-4 border-b border-zinc-950/5 dark:border-white/5 py-4">
-                <pre>{JSON.stringify(project.settings, null, 2)}</pre>
-              </td> */}
+              <td className="relative px-4 border-b border-zinc-950/5 dark:border-white/5 py-4">
+                {/* <pre>{JSON.stringify(project.settings, null, 2)}</pre> */}
+
+                <Dropdown>
+                  <DropdownButton plain aria-label="More options">
+                    <EllipsisVerticalIcon />
+                  </DropdownButton>
+                  <DropdownMenu anchor="bottom end" onClick={handleSelect}>
+                    {/* <DropdownItem to={`/projects/${project.id}`}>
+                      View
+                    </DropdownItem> */}
+                    <DropdownItem value="delete" data-id={`${project.id}`}>
+                      Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </td>
             </tr>
           ))}
         </tbody>

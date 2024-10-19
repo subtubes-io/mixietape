@@ -80,7 +80,7 @@ export function DropdownItem({
 
   return (
     <Headless.MenuItem>
-      {'href' in props ? (
+      {'to' in props ? (
         <Link {...props} className={classes} />
       ) : (
         <button type="button" {...props} className={classes} />

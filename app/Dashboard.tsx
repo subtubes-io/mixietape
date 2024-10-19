@@ -27,12 +27,31 @@ export default function HomeDashboard() {
       };
       await projectsRepository.createProject(newProject);
       const updatedProjects = await projectsRepository.getAllProjects();
+      console.log(updatedProjects);
       setProjects(updatedProjects);
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error creating project:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        // Fetch the projects using the repository
+        const data = await projectsRepository.getAllProjects();
+        setProjects(data);
+      } catch (err) {
+        setError('Failed to load projects');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container mx-auto py-8">

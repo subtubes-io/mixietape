@@ -1,4 +1,4 @@
-import { BaseRepository } from "./baseRepository";
+import { BaseRepository } from './baseRepository';
 
 export interface Project {
   id: number;
@@ -31,7 +31,7 @@ export class ProjectsRepository extends BaseRepository {
   }
 
   // Delete a project by ID (optional, if needed)
-  async deleteProject(id: number): Promise<void> {
+  async deleteProject(id: string): Promise<void> {
     await this.axios.delete(`/projects/${id}`);
   }
 }
