@@ -2,15 +2,12 @@ import path from 'path';
 import * as tar from 'tar';
 import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
-import express from 'express'; // Import express
-import cors from 'cors';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
 let mainWindow: BrowserWindow | null = null;
-let server: any; // To hold the reference to the Express server
 
 class AppUpdater {
   constructor() {
@@ -19,26 +16,6 @@ class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
-// Function to start the Express server
-const startServer = () => {
-  const app = express();
-  const PORT = 3001;
-
-  app.use(cors());
-
-  // Serve static files from the "extracted" directory
-  app.use(
-    '/files',
-    express.static(
-      '/Users/edgarmartinez/Code/electron-react-boilerplate/extracted',
-    ),
-  );
-
-  server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-};
 
 // Handle file selection and extraction in the main process
 ipcMain.handle('select-file', async () => {
@@ -133,23 +110,12 @@ app.on('window-all-closed', () => {
   }
 });
 
-// Start the Express server and the Electron app
 app
   .whenReady()
   .then(() => {
-    console.log(
-      '====================================================',
-      path.join(__dirname, 'extracted'),
-    );
-    startServer(); // Start the Express server when the app is ready
     createWindow();
+    return null;
   })
   .catch((err) => {
     console.log(`Error: ${err.message}`);
   });
-
-app.on('quit', () => {
-  if (server) {
-    server.close(); // Close the Express server when the app quits
-  }
-});
