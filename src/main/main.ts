@@ -101,6 +101,7 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
+  // eslint-disable-next-line no-new
   new AppUpdater();
 };
 
