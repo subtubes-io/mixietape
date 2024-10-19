@@ -8,28 +8,30 @@ function DynamicComponentLoader() {
   const handleUploadAndExtract = async () => {
     try {
       // Step 1: Select the tar file using the Electron file dialog
-      const filePath = await window.electron.selectFile();
-      if (!filePath) {
-        setStatus('File selection canceled.');
-        return;
-      }
+      // const filePath = await window.electron.selectFile();
+      // if (!filePath) {
+      //   setStatus('File selection canceled.');
+      //   return;
+      // }
 
-      const destination =
-        '/Users/edgarmartinez/Code/electron-react-boilerplate/_foo'; // Set the extraction path
+      // const destination =
+      //   '/Users/edgarmartinez/Code/electron-react-boilerplate/_foo'; // Set the extraction path
 
-      // Step 2: Extract the tar file
-      const result = await window.electron.uploadAndExtract(
-        filePath,
-        destination,
-      );
-      setStatus(`Extraction completed at: ${result.targetPath}`);
+      // // Step 2: Extract the tar file
+      // const result = await window.electron.uploadAndExtract(
+      //   filePath,
+      //   destination,
+      // );
+      // setStatus(`Extraction completed at: ${result.targetPath}`);
 
-      // Step 3: Dynamically load the component from the extracted path
-      const componentPath = `${result.targetPath}/index.js`;
+      // Step 3: Dynamically load the component from the Express server
+      // const componentUrl = `http://localhost:3001/files/${result.targetPath}/index.js`;
 
-      // Dynamically import the component from the extracted folder
+      const componentUrl =
+        'file:///Users/edgarmartinez/Code/electron-react-boilerplate/extracted/index.js'; //`http://localhost:3001/files/index.js`;
+      // Dynamically import the component from the server
       const dynamicComponent = lazy(
-        () => import(/* webpackIgnore: true */ componentPath),
+        () => import(/* webpackIgnore: true */ componentUrl),
       );
       setComponent(() => dynamicComponent);
     } catch (err) {

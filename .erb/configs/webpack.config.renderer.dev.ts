@@ -135,6 +135,9 @@ const configuration: webpack.Configuration = {
         ]),
 
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      React: 'react',
+    }),
 
     /**
      * Create global constants which can be configured at compile time.

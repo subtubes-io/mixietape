@@ -2,10 +2,15 @@ import path from 'path';
 import * as tar from 'tar';
 import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
+import express from 'express'; // Import express
+import cors from 'cors';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+let mainWindow: BrowserWindow | null = null;
+let server: any; // To hold the reference to the Express server
 
 class AppUpdater {
   constructor() {
@@ -15,7 +20,25 @@ class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+// Function to start the Express server
+const startServer = () => {
+  const app = express();
+  const PORT = 3001;
+
+  app.use(cors());
+
+  // Serve static files from the "extracted" directory
+  app.use(
+    '/files',
+    express.static(
+      '/Users/edgarmartinez/Code/electron-react-boilerplate/extracted',
+    ),
+  );
+
+  server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+};
 
 // Handle file selection and extraction in the main process
 ipcMain.handle('select-file', async () => {
@@ -38,12 +61,10 @@ const getBaseNameWithoutAllExtensions = (filePath: string) => {
 ipcMain.handle(
   'upload-and-extract',
   async (event, filePath: string, destination: string) => {
-    // Use the function to get the correct base name
     const baseName = getBaseNameWithoutAllExtensions(filePath);
     const targetPath = path.join(destination, baseName);
 
     try {
-      // Ensure targetPath exists
       if (!fs.existsSync(targetPath)) {
         fs.mkdirSync(targetPath, { recursive: true });
       }
@@ -56,44 +77,12 @@ ipcMain.handle(
 
       return { targetPath };
     } catch (err: unknown) {
-      throw new Error(`Extraction failed: ${err.message}`);
+      throw new Error(`Extraction failed: ${(err as Error).message}`);
     }
   },
 );
 
-if (process.env.NODE_ENV === 'production') {
-  // eslint-disable-next-line global-require
-  const sourceMapSupport = require('source-map-support');
-  sourceMapSupport.install();
-}
-
-const isDebug =
-  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
-if (isDebug) {
-  // eslint-disable-next-line global-require
-  require('electron-debug')();
-}
-
-const installExtensions = async () => {
-  // eslint-disable-next-line global-require
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
-
-  return installer
-    .default(
-      extensions.map((name: any) => installer[name]),
-      forceDownload,
-    )
-    .catch(console.log);
-};
-
 const createWindow = async () => {
-  if (isDebug) {
-    await installExtensions();
-  }
-
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
@@ -108,22 +97,17 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
+      preload: path.join(__dirname, '../../.erb/dll/preload.js'),
       contextIsolation: true,
+      nodeIntegration: false, // Ensure nodeIntegration is disabled for security
+      webSecurity: false,
     },
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
   mainWindow.on('ready-to-show', () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
+    if (mainWindow) {
       mainWindow.show();
     }
   });
@@ -135,44 +119,37 @@ const createWindow = async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
 
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
   new AppUpdater();
 };
 
-/**
- * Add event listeners...
- */
-
 app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
+// Start the Express server and the Electron app
 app
   .whenReady()
   .then(() => {
+    console.log(
+      '====================================================',
+      path.join(__dirname, 'extracted'),
+    );
+    startServer(); // Start the Express server when the app is ready
     createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) {
-        createWindow();
-      }
-      return null;
-    });
-
-    return null;
   })
   .catch((err) => {
     console.log(`Error: ${err.message}`);
   });
+
+app.on('quit', () => {
+  if (server) {
+    server.close(); // Close the Express server when the app quits
+  }
+});
