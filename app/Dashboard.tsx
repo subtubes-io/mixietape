@@ -4,7 +4,7 @@ import type { Project } from '@/repositories/ProjectsRepository';
 import ProjectsTable from '@/components/tables/ProjectsTable';
 import ModalDialog from '@/components/Dialog';
 import NewProjectForm from '@/components/forms/ProjectForm';
-import DynamicComponentLoader from '@/components/extensions/DynamicLoader';
+// import DynamicComponentLoader from '@/components/extensions/DynamicLoader';
 
 export default function HomeDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -33,14 +33,6 @@ export default function HomeDashboard() {
       console.error('Error creating project:', error);
     }
   };
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>{error}</div>;
-  // }
 
   return (
     <div className="container mx-auto py-8">
@@ -79,7 +71,7 @@ export default function HomeDashboard() {
           </p>
         </div>
       </section>
-
+      {/*
       <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-800 shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold text-zinc-950 dark:text-white">
@@ -87,7 +79,7 @@ export default function HomeDashboard() {
           </h2>
           <DynamicComponentLoader />
         </div>
-      </section>
+      </section> */}
 
       <section className="mt-8">
         <h2 className="text-2xl font-bold text-zinc-950 dark:text-white mb-4">

@@ -77,7 +77,7 @@ const createWindow = async () => {
       preload: path.join(__dirname, '../../.erb/dll/preload.js'),
       contextIsolation: true,
       nodeIntegration: false, // Ensure nodeIntegration is disabled for security
-      webSecurity: false,
+      webSecurity: true,
     },
   });
 
