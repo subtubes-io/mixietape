@@ -7,10 +7,8 @@ import { PartitionRepository } from '@/repositories/PartitionRepository';
 function ChartParent() {
   const [xField, setXField] = useState<string>('tablename');
   const [yField, setYField] = useState<string>('rowcount');
-  const [tooltipFields, setTooltipFields] = useState<string[]>([
-    'tablename',
-    'tablesize',
-  ]);
+  const [allFields, setAllFields] = useState<string[]>([]);
+  const [tooltipFields, setTooltipFields] = useState<string[]>([]);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,6 +20,8 @@ function ChartParent() {
       try {
         const data = await partitionRepo.getPartitions();
         setRecords(data);
+        setAllFields(Object.keys(data[0]));
+        setTooltipFields(Object.keys(data[0]));
       } catch (err) {
         setError('Failed to fetch records.');
       } finally {
@@ -33,14 +33,6 @@ function ChartParent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fields = [
-    'tablename',
-    'parenttable',
-    'tablesize',
-    'rowcount',
-    'tabletype',
-  ]; // Passing this as a prop to the form
-
   interface Form {
     sqlQuery: string;
     xField: string;
@@ -51,8 +43,8 @@ function ChartParent() {
   const onSubmit = (form: Form) => {
     setXField(form.xField);
     setYField(form.yField);
-    setTooltipFields(form.tooltipFields);
-    // console.log(form); // You can replace this with actual functionality
+    setAllFields(form.tooltipFields);
+    console.log(form); // You can replace this with actual functionality
   };
 
   return (
@@ -60,7 +52,7 @@ function ChartParent() {
       <SettingsPanel>
         <BarChartSettingsForm
           onSubmit={onSubmit}
-          fields={fields}
+          fields={allFields}
           tooltipFields={tooltipFields}
         />
       </SettingsPanel>
