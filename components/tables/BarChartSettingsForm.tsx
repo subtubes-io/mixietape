@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import { Switch } from '@headlessui/react';
 import FieldSelector from '@/components/charts/FieldSelector'; // Adjust the path based on your file structure
 
+interface Form {
+  sqlQuery: string;
+  xField: string;
+  yField: string;
+  tooltipFields: string[];
+}
 interface SettingsFormProps {
-  onSubmit: (
-    tableName: string,
-    isRegex: boolean,
-    sqlQuery: string,
-    xField: string,
-    yField: string,
-    tooltipFields: string[],
-  ) => void;
+  onSubmit: (form: Form) => void;
 }
 
 export default function SettingsForm({ onSubmit }: SettingsFormProps) {
-  const [tableName, setTableName] = useState<string>(''); // Table name input state
-  const [isRegex, setIsRegex] = useState<boolean>(false); // Toggle state for regex
   const [sqlQuery, setSqlQuery] = useState<string>(''); // SQL query input state
 
   // State for FieldSelector options
@@ -36,8 +32,12 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Pass all the values to onSubmit function
-    onSubmit(tableName, isRegex, sqlQuery, xField, yField, tooltipFields);
+    onSubmit({
+      sqlQuery,
+      xField,
+      yField,
+      tooltipFields,
+    });
   };
 
   const handleTooltipFieldChange = (field: string, checked: boolean) => {
@@ -51,7 +51,6 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
       onSubmit={handleSubmit}
       className="transition-all duration-700 ease-in-out pt-4"
     >
-      {/* Row for SQL Query Input */}
       <div className="flex items-center space-x-4">
         <label
           htmlFor="sqlQuery"
@@ -69,7 +68,6 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
         />
       </div>
 
-      {/* Field Selector for X-Axis, Y-Axis, and Tooltip Fields */}
       <div className="mt-6">
         <FieldSelector
           fields={fields}
@@ -82,7 +80,6 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
         />
       </div>
 
-      {/* Submit Button */}
       <div className="flex justify-end mt-4">
         <button
           type="submit"

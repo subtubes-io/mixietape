@@ -6,13 +6,11 @@ import {
 } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AdjustmentsVerticalIcon } from '@heroicons/react/24/solid';
-import SettingsForm from './SettingsForm';
 
-interface SettingsPanelProps {
-  onSubmit: (tableName: string, isRegex: boolean) => void;
+interface SettingsPanelOptions {
+  children: React.ReactNode;
 }
-
-export default function SettingsPanel({ onSubmit }: SettingsPanelProps) {
+export default function SettingsPanel({ children }: SettingsPanelOptions) {
   return (
     <Disclosure>
       {({ open }) => (
@@ -35,8 +33,7 @@ export default function SettingsPanel({ onSubmit }: SettingsPanelProps) {
                 className="overflow-hidden"
               >
                 <div className="p-4 bg-zinc-200 dark:bg-zinc-800 rounded-md">
-                  {/* SettingsForm Component */}
-                  <SettingsForm onSubmit={onSubmit} />
+                  {children}
                 </div>
               </DisclosurePanel>
             )}

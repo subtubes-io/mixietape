@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import D3BarChart from '@/components/charts/D3BarChart'; // Assuming D3BarChart is in the same folder
 import SettingsPanel from '@/components/tables/SettingsPanel';
+import BarChartSettingsForm from '@/components/tables/BarChartSettingsForm';
 
 function ChartParent() {
   const [xField, setXField] = useState<string>('tablename');
@@ -10,15 +11,21 @@ function ChartParent() {
     'tablesize',
   ]);
 
-  const handleTooltipFieldChange = (field: string, checked: boolean) => {
-    setTooltipFields((prevFields) =>
-      checked ? [...prevFields, field] : prevFields.filter((f) => f !== field),
-    );
+  interface Form {
+    sqlQuery: string;
+    xField: string;
+    yField: string;
+    tooltipFields: string[];
+  }
+  const onSubmit = (form: Form) => {
+    console.log(form);
   };
 
   return (
     <div>
-      <SettingsPanel onSubmit={handleTooltipFieldChange} />
+      <SettingsPanel>
+        <BarChartSettingsForm onSubmit={onSubmit} />
+      </SettingsPanel>
       <D3BarChart
         xField={xField}
         yField={yField}

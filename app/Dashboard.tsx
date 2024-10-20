@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProjectsRepository } from '@/repositories/ProjectsRepository';
 import type { Project } from '@/repositories/ProjectsRepository';
 import ProjectsTable from '@/components/tables/ProjectsTable';
