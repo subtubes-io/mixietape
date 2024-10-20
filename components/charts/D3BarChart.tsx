@@ -2,37 +2,49 @@ import { useEffect, useState, useRef } from 'react';
 import * as d3 from 'd3';
 import Loader from '@/components/Loader';
 import ErrorMessage from '@/components/ErrorMessage';
-
 import { PartitionRepository } from '@/repositories/PartitionRepository';
 
-import type { Partition } from '@/repositories/PartitionRepository';
+// Define type for data records
+interface RecordData {
+  tablename: string;
+  parenttable: string | null;
+  tablesize: string;
+  rowcount: number;
+  tabletype: string;
+}
 
-// eslint-disable-next-line import/prefer-default-export
-export const D3BarChart = function () {
+interface D3BarChartProps {
+  xField: string; // X-axis field passed as a prop
+  yField: string; // Y-axis field passed as a prop
+  tooltipFields: string[]; // Tooltip fields passed as a prop
+}
+
+function D3BarChart({ xField, yField, tooltipFields }: D3BarChartProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [partitions, setPartitions] = useState<Partition[]>([]);
+  const [records, setRecords] = useState<RecordData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const partitionRepo = new PartitionRepository();
 
   useEffect(() => {
-    const fetchPartitions = async () => {
+    const fetchData = async () => {
       try {
         const data = await partitionRepo.getPartitions();
-        setPartitions(data);
+        setRecords(data); // Store the arbitrary records data
       } catch (err) {
-        setError('Failed to fetch partitions.');
+        setError('Failed to fetch records.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPartitions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchData();
   }, []);
 
   useEffect(() => {
+    if (!records.length) return;
+
     const width = 1000;
     const height = 350;
     const margin = { top: 20, right: 30, bottom: 60, left: 60 };
@@ -43,13 +55,13 @@ export const D3BarChart = function () {
     // Create scales
     const xScale = d3
       .scaleBand()
-      .domain(partitions.map((d) => d.tablename))
+      .domain(records.map((d) => d[xField] as string))
       .range([margin.left, width - margin.right])
       .padding(0.1);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(partitions, (d) => d.rowcount) ?? 0])
+      .domain([0, d3.max(records, (d) => d[yField] as number) ?? 0])
       .nice()
       .range([height - margin.bottom, margin.top]);
 
@@ -87,23 +99,27 @@ export const D3BarChart = function () {
     // Create bars with tooltip
     svg
       .selectAll('.bar')
-      .data(partitions)
+      .data(records)
       .join('rect')
       .attr('class', 'bar')
-      .attr('x', (d) => xScale(d.tablename)!)
-      .attr('y', (d) => yScale(d.rowcount))
+      .attr('x', (d) => xScale(d[xField] as string)!)
+      .attr('y', (d) => yScale(d[yField] as number))
       .attr('width', xScale.bandwidth())
-      .attr('height', (d) => height - margin.bottom - yScale(d.rowcount))
+      .attr(
+        'height',
+        (d) => height - margin.bottom - yScale(d[yField] as number),
+      )
       .attr('fill', 'rgba(128 232 255)')
       .on('mouseover', (event, d) => {
+        const tooltipContent = tooltipFields
+          .map(
+            (field) =>
+              `<strong>${field}:</strong> ${d[field as keyof RecordData]}`,
+          )
+          .join('<br/>');
         tooltip
           .style('display', 'block')
-          .html(
-            `<strong>Partition:</strong> ${d.tablename}<br/>
-             <strong>Parent Table:</strong> ${d.parenttable}<br/>
-             <strong>Size:</strong> ${d.tablesize}<br/>
-             <strong>Rows:</strong> ${d.rowcount}`,
-          )
+          .html(tooltipContent)
           .style('left', `${event.pageX + 10}px`)
           .style('top', `${event.pageY - 28}px`);
       })
@@ -115,12 +131,13 @@ export const D3BarChart = function () {
       .on('mouseout', () => {
         tooltip.style('display', 'none');
       });
+
     svg.selectAll('text').style('color', 'white').style('font-size', '12px');
     // Cleanup tooltips when component unmounts
     return () => {
       tooltip.remove();
     };
-  }, [partitions]);
+  }, [records, xField, yField, tooltipFields]);
 
   return (
     <>
@@ -129,11 +146,13 @@ export const D3BarChart = function () {
       {!loading && !error && (
         <svg
           ref={svgRef}
-          style={{ width: '100%', height: '500px' }}
+          style={{ width: '100%', height: '400px' }}
           viewBox="0 0 1000 350"
           preserveAspectRatio="xMidYMid meet"
         />
       )}
     </>
   );
-};
+}
+
+export default D3BarChart;

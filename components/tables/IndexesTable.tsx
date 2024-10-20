@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IndexRepository } from '@/repositories/IndexRepository';
 import type { Index } from '@/repositories/IndexRepository';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';

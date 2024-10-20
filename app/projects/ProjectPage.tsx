@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider } from '@/components/catalyst/divider';
-import { D3BarChart } from '@/components/charts';
+import ChartParent from '@/components/charts/ChartParent';
 import { ComponentModule } from '@/components/ComponentModule';
 import ForeignKeyTable from '@/components/tables/ForeignKeysTable';
 import IndexesTable from '@/components/tables/IndexesTable';
@@ -12,7 +12,7 @@ export default function ProjectPage() {
     <>
       <SidePanel />
       <ComponentModule title="Table Partition">
-        <D3BarChart />
+        <ChartParent />
       </ComponentModule>
       <Divider />
       <ComponentModule title="Table Indexes">
