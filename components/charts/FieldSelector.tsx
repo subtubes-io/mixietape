@@ -10,7 +10,6 @@ interface FieldSelectorProps {
   onXFieldChange: (field: string) => void;
   onYFieldChange: (field: string) => void;
   onTooltipFieldChange: (field: string, checked: boolean) => void; // Pass the field and its checked state
-  label: string;
 }
 
 function classNames(...classes: string[]) {
@@ -25,12 +24,9 @@ function FieldSelector({
   onXFieldChange,
   onYFieldChange,
   onTooltipFieldChange,
-  label,
 }: FieldSelectorProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium leading-6 text-gray-900">{label}</h3>
-
       {/* X Axis Field Selector */}
       <div className="flex items-center space-x-4">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4">

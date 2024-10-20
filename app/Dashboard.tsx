@@ -61,10 +61,11 @@ export default function HomeDashboard() {
             Dashboard
           </h1>
           <p className="text-zinc-500 dark:text-zinc-400">
-            Overview of your project's performance.
+            Overview of performance.
           </p>
         </div>
         <button
+          type="button"
           onClick={() => setIsModalOpen(true)}
           className="bg-cyan-500 text-white py-2 px-4 rounded-lg hover:bg-cyan-600 dark:bg-cyan-400 dark:hover:bg-cyan-500"
         >

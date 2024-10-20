@@ -79,7 +79,6 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
           onXFieldChange={setXField}
           onYFieldChange={setYField}
           onTooltipFieldChange={handleTooltipFieldChange}
-          label="Select Chart Fields"
         />
       </div>
 
