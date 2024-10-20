@@ -49,15 +49,18 @@ export default function SettingsForm({
   return (
     <form onSubmit={handleSubmit} className="pt-4 space-y-4">
       {/* SQL Query Textarea */}
-      <div className="flex items-center space-x-4">
-        <label htmlFor="sqlQuery" className="text-sm font-medium">
+      <div className="flex items-start space-x-4">
+        <label
+          htmlFor="sqlQuery"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4"
+        >
           SQL Query
         </label>
         <textarea
           id="sqlQuery"
           value={sqlQuery}
           onChange={(e) => setSqlQuery(e.target.value)}
-          className="block w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+          className="block w-3/4 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm bg-white dark:bg-zinc-700 dark:text-white transition-all duration-700 ease-in-out"
           placeholder="Write your SQL query here"
           rows={5}
         />
@@ -245,7 +248,7 @@ export default function SettingsForm({
       <div className="flex justify-end mt-4">
         <button
           type="submit"
-          className="text-sm bg-cyan-500 text-black px-4 py-2 rounded hover:bg-cyan-400"
+          className="text-sm bg-cyan-500 dark:bg-cyan-300 text-black px-4 py-2 rounded hover:bg-cyan-400 dark:hover:bg-cyan-500"
         >
           Submit
         </button>
