@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import D3BarChart from '@/components/charts/D3BarChart'; // Assuming D3BarChart is in the same folder
 import FieldSelector from '@/components/charts/FieldSelector'; // Your FieldSelector component
+import SettingsPanel from '../tables/SettingsPanel';
+import SettingsForm from '../tables/SettingsForm';
 
 function ChartParent() {
   const [xField, setXField] = useState<string>('tablename');
@@ -26,16 +28,7 @@ function ChartParent() {
 
   return (
     <div>
-      <FieldSelector
-        fields={fields}
-        selectedXField={xField}
-        selectedYField={yField}
-        selectedTooltipFields={tooltipFields}
-        onXFieldChange={setXField}
-        onYFieldChange={setYField}
-        onTooltipFieldChange={handleTooltipFieldChange}
-        label="Select Chart Fields"
-      />
+      <SettingsPanel onSubmit={handleTooltipFieldChange} />
       <D3BarChart
         xField={xField}
         yField={yField}

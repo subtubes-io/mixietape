@@ -6,7 +6,7 @@ import {
 } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AdjustmentsVerticalIcon } from '@heroicons/react/24/solid';
-import SettingsForm from './Settings';
+import SettingsForm from './SettingsForm';
 
 interface SettingsPanelProps {
   onSubmit: (tableName: string, isRegex: boolean) => void;

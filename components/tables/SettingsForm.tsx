@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Switch } from '@headlessui/react';
-import FieldSelector from '@/components/charts/FieldSelector';
+import FieldSelector from '@/components/charts/FieldSelector'; // Adjust the path based on your file structure
 
 interface SettingsFormProps {
   onSubmit: (
@@ -67,31 +67,6 @@ export default function SettingsForm({ onSubmit }: SettingsFormProps) {
           placeholder="Write your SQL query here"
           rows={5}
         />
-      </div>
-
-      {/* Row for "Use SQL LIKE Statement" Toggle */}
-      <div className="flex items-center space-x-4 mt-4">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-1/4">
-          Use SQL LIKE Statement
-        </label>
-        <div className="flex items-center space-x-2 w-3/4">
-          <Switch
-            checked={isRegex}
-            onChange={setIsRegex}
-            className={`${
-              isRegex ? 'bg-cyan-400' : 'bg-gray-200 dark:bg-gray-600'
-            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-100 ease-in-out focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:ring-offset-zinc-800`}
-          >
-            <span
-              className={`${
-                isRegex ? 'translate-x-6' : 'translate-x-1'
-              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-700 ease-in-out`}
-            />
-          </Switch>
-          <span className="text-sm text-gray-700 dark:text-gray-300">
-            Use SQL LIKE Statement
-          </span>
-        </div>
       </div>
 
       {/* Field Selector for X-Axis, Y-Axis, and Tooltip Fields */}
