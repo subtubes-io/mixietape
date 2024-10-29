@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import SseComponent from '@/components/trading/Sse';
 import ReportForm from '@/components/trading/ReportForm';
 import SwitchList from '@/components/trading/SwitchList';
 
@@ -16,7 +16,9 @@ export default function HomeDashboard() {
           <p className="text-zinc-500 dark:text-zinc-400">10-Q Report</p>
         </div>
       </header>
-
+      <section className="mt-8">
+        <SseComponent />
+      </section>
       {/* <ModalDialog
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
