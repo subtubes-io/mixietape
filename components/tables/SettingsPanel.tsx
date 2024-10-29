@@ -17,11 +17,11 @@ export default function SettingsPanel({ onSubmit }: SettingsPanelProps) {
     <Disclosure>
       {({ open }) => (
         <>
+          pink-pink-
           {/* Toggle Button */}
           <DisclosureButton className="ml-auto mr-2 mb-2 bg-cyan-400 text-white px-2 py-2 rounded hover:bg-cyan-500 transition-all flex items-center justify-center">
             <AdjustmentsVerticalIcon className="h-5 w-5" />
           </DisclosureButton>
-
           {/* Animated Panel */}
           <AnimatePresence initial={false}>
             {open && (

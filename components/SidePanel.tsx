@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useState } from 'react';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   LinkIcon,
   PlusIcon,
   QuestionMarkCircleIcon,
-} from "@heroicons/react/20/solid";
+} from '@heroicons/react/20/solid';
 
 export default function SidePanel() {
   const [open, setOpen] = useState<boolean>(false);
@@ -71,9 +71,9 @@ export default function SidePanel() {
                                 id="project-name"
                                 name="project-name"
                                 type="text"
-                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900 
-                                dark:text-white shadow-sm ring-1 ring-inset 
-                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800  placeholder:text-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-inset 
+                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900
+                                dark:text-white shadow-sm ring-1 ring-inset
+                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800  placeholder:text-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-inset
                                 focus:ring-zinc-600 dark:focus:ring-zinc-400 sm:text-sm sm:leading-6"
                                 placeholder="Enter project name"
                               />
@@ -91,8 +91,8 @@ export default function SidePanel() {
                                 id="description"
                                 name="description"
                                 rows={4}
-                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset 
-                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800 placeholder:text-zinc-400 dark:placeholder-zinc-500 
+                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset
+                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800 placeholder:text-zinc-400 dark:placeholder-zinc-500
                                 focus:ring-2 focus:ring-inset focus:ring-zinc-600 dark:focus:ring-zinc-400 sm:text-sm sm:leading-6"
                                 placeholder="Enter description"
                               />
@@ -265,7 +265,7 @@ export default function SidePanel() {
                     </button>
                     <button
                       type="submit"
-                      className="ml-4 inline-flex justify-center rounded-md bg-cyan-600 px-3 py-2 text-sm text-black shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+                      className="ml-4 inline-flex justify-center rounded-md bg-pink-600 px-3 py-2 text-sm text-black shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
                     >
                       Save
                     </button>
