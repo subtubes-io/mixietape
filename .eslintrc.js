@@ -14,6 +14,8 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'jsx-a11y/label-has-associated-control': 'off',
+    'no-console': 'off',
+    'promise/always-return': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,
