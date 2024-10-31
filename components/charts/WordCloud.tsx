@@ -2,8 +2,18 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import d3Cloud from 'd3-cloud';
 
-export default function WordCloud({ wordData }) {
-  const svgRef = useRef(null);
+interface Word {
+  text: string;
+  size: number;
+  rotate: number; // Add rotate to the Word interface
+}
+
+interface WordCloudProps {
+  wordData: Word[];
+}
+
+export default function WordCloud({ wordData }: WordCloudProps) {
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
     const width = 800;
@@ -18,17 +28,7 @@ export default function WordCloud({ wordData }) {
       .attr('width', width)
       .attr('height', height);
 
-    const layout = d3Cloud()
-      .size([width, height])
-      .words(wordData)
-      .padding(5)
-      .rotate(() => Math.floor(Math.random() * 2) * 90)
-      .fontSize((d) => d.size)
-      .on('end', draw);
-
-    layout.start();
-
-    function draw(words) {
+    function draw(words: Word[]) {
       svg
         .append('g')
         .attr('transform', `translate(${width / 2},${height / 2})`)
@@ -42,7 +42,17 @@ export default function WordCloud({ wordData }) {
         .attr('transform', (d) => `translate(${d.x},${d.y})rotate(${d.rotate})`)
         .text((d) => d.text);
     }
+
+    const layout = d3Cloud<Word>()
+      .size([width, height])
+      .words(wordData)
+      .padding(5)
+      .rotate(() => Math.floor(Math.random() * 2) * 90)
+      .fontSize((d) => d.size)
+      .on('end', draw);
+
+    layout.start();
   }, [wordData]);
 
-  return <div ref={svgRef}></div>;
+  return <div ref={svgRef} />;
 }

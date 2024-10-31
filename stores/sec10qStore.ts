@@ -24,8 +24,10 @@ interface Sec10qStore {
 // eslint-disable-next-line import/prefer-default-export
 export const useSec10qStore = create<Sec10qStore>((set) => ({
   data: [],
-  addData: (newData) =>
-    set((state) => ({
+  addData: (newData) => {
+    console.log(newData);
+    return set((state) => ({
       data: [...state.data, newData],
-    })),
+    }));
+  },
 }));

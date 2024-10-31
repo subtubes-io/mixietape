@@ -1,9 +1,9 @@
 // SseComponent.tsx
 import React, { useEffect, useState } from 'react';
+import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/solid';
 import { useSec10qStore } from '@/stores/sec10qStore';
 
 export default function SseComponent() {
-  const [data, setData] = useState<string[]>([]);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
   const userId = '123'; // Replace with dynamic user ID from your auth context
   const authToken = 'your-auth-token'; // Replace with your actual auth token
@@ -13,7 +13,7 @@ export default function SseComponent() {
   useEffect(() => {
     let isCancelled = false;
     let initialReader: ReadableStreamDefaultReader | null = null;
-    let retryDelay = 1000; // Start with a 1-second delay
+    let retryDelay = 1000;
 
     function handleEvent(event: string) {
       if (event.trim()) {
@@ -21,13 +21,10 @@ export default function SseComponent() {
 
         try {
           const parsedData = JSON.parse(dataStr);
-
-          // Route data to the appropriate store based on metadata.type
           switch (parsedData.metadata?.type) {
-            case 'sec10q':
+            case '10q':
               addSec10qData(parsedData);
               break;
-            // Add more cases for different metadata types if needed
             default:
               console.warn(
                 `Unhandled metadata type: ${parsedData.metadata?.type}`,
@@ -36,14 +33,11 @@ export default function SseComponent() {
         } catch (error) {
           console.error('Error parsing JSON:', error);
         }
-
-        setData((prevData) => [...prevData, dataStr]);
       }
     }
 
     function retryConnection() {
       if (isCancelled) return;
-
       retryDelay = Math.min(retryDelay * 2, 64000);
       setTimeout(() => {
         if (!isCancelled) {
@@ -65,7 +59,6 @@ export default function SseComponent() {
           const chunk = decoder.decode(value, { stream: true });
           const events = chunk.split('\n\n');
           events.forEach(handleEvent);
-
           readChunk(reader, decoder);
         })
         .catch((error) => {
@@ -77,7 +70,6 @@ export default function SseComponent() {
 
     function fetchSse() {
       setConnectionStatus('Connecting...');
-
       fetch('http://localhost:3000/sse', {
         method: 'POST',
         headers: {
@@ -119,5 +111,13 @@ export default function SseComponent() {
     };
   }, [userId, authToken, addSec10qData]);
 
-  return <div>icon in here</div>;
+  return (
+    <div>
+      {connectionStatus === 'Connected' ? (
+        <SignalIcon className="h-6 w-6 text-green-500" />
+      ) : (
+        <SignalSlashIcon className="h-6 w-6 text-yellow-500 animate-blink" />
+      )}
+    </div>
+  );
 }

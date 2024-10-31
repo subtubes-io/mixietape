@@ -5,6 +5,7 @@ import Toast from '@/components/custom/Toast';
 import HomeDashboard from '@/app/Dashboard';
 import ProjectsPage from '@/app/projects/ProjectsPage';
 import ProjectPage from '@/app/projects/ProjectPage';
+import './App.css';
 
 export default function App() {
   return (

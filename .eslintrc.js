@@ -16,6 +16,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'no-console': 'off',
     'promise/always-return': 'off',
+    'react/function-component-definition': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,
