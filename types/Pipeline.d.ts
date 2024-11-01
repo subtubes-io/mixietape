@@ -20,3 +20,10 @@ interface Sec10qData {
     userId: string;
   };
 }
+
+export type Node = {
+  id: string;
+  label: string;
+  type: 'node' | 'process' | 'conditional';
+  children?: string[];
+};

@@ -1,15 +1,37 @@
 import { useState } from 'react';
+import type { Node } from '@/types';
+
 import SseComponent from '@/components/trading/Sse';
-import ReportForm from '@/components/trading/ReportForm';
-import SwitchList from '@/components/trading/SwitchList';
 import { useSec10qStore } from '@/stores/sec10qStore';
-import WordCloud from '@/components/charts/WordCloud';
 import PipelineDiagram from '@/components/flow/PipelineDiagram';
 import ModalDialog from '@/components/Dialog';
+import { useNodeStore } from '@/stores/nodeStore';
 
 export default function HomeDashboard() {
   const { data } = useSec10qStore();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // const nodeList: Node[] = [
+  //   { id: 'start', label: 'Start Node', type: 'node' },
+  //   { id: 'p1', label: 'Process', type: 'process' },
+  //   { id: 'n2', label: 'Node 2', type: 'node' },
+  //   { id: 'p2', label: 'Process', type: 'process' },
+  //   { id: 'n3', label: 'Node 3', type: 'node' },
+  //   // {
+  //   //   id: 'p3',
+  //   //   label: 'Conditional Process',
+  //   //   type: 'conditional',
+  //   //   children: ['n4', 'n5'],
+  //   // },
+  //   // { id: 'n4', label: 'Node 4', type: 'node' },
+  //   // { id: 'p4', label: 'Process', type: 'process' },
+  //   // { id: 'n5', label: 'Node 5', type: 'node' },
+  //   // { id: 'p5', label: 'Process', type: 'process' },
+  //   // { id: 'end', label: 'End Node', type: 'node' },
+  // ];
+
+  const nodes = useNodeStore((state) => state.nodes);
+  // const addNode = useNodeStore((state) => state.addNode);
 
   return (
     <div className="container mx-auto py-8">
@@ -41,7 +63,7 @@ export default function HomeDashboard() {
       </ModalDialog>
 
       <section className="mt-8">
-        <PipelineDiagram />
+        <PipelineDiagram nodeList={nodes} />
       </section>
     </div>
   );

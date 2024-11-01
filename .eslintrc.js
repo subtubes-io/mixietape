@@ -17,6 +17,7 @@ module.exports = {
     'no-console': 'off',
     'promise/always-return': 'off',
     'react/function-component-definition': 'off',
+    'import/prefer-default-export': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,

@@ -1,34 +1,16 @@
 // src/components/PipelineDiagram.tsx
 import React, { useState } from 'react';
+import type { Node } from '@/types';
+
 import PipelineNode from './PipelineNode';
 import PipelineFormModal from './PipelineFormModal';
 
-type Node = {
-  id: string;
-  label: string;
-  type: 'node' | 'process' | 'conditional';
-  children?: string[];
-};
+interface PipeLineProps {
+  nodeList: Node[];
+}
 
-const PipelineDiagram: React.FC = () => {
-  const [nodes, setNodes] = useState<Node[]>([
-    { id: 'start', label: 'Start Node', type: 'node' },
-    { id: 'p1', label: 'Process', type: 'process' },
-    { id: 'n2', label: 'Node 2', type: 'node' },
-    { id: 'p2', label: 'Process', type: 'process' },
-    { id: 'n3', label: 'Node 3', type: 'node' },
-    {
-      id: 'p3',
-      label: 'Conditional Process',
-      type: 'conditional',
-      children: ['n4', 'n5'],
-    },
-    { id: 'n4', label: 'Node 4', type: 'node' },
-    { id: 'p4', label: 'Process', type: 'process' },
-    { id: 'n5', label: 'Node 5', type: 'node' },
-    { id: 'p5', label: 'Process', type: 'process' },
-    { id: 'end', label: 'End Node', type: 'node' },
-  ]);
+const PipelineDiagram: React.FC<PipeLineProps> = ({ nodeList }) => {
+  const [nodes, setNodes] = useState<Node[]>(nodeList);
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -69,6 +51,7 @@ const PipelineDiagram: React.FC = () => {
       </div>
 
       <button
+        type="button"
         onClick={openModal}
         className="bg-indigo-500 text-gray-100 px-4 py-2 rounded-md shadow hover:bg-indigo-600"
       >
