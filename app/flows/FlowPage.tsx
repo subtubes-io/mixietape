@@ -16,19 +16,19 @@ export default function HomeDashboard() {
       <header className="mb-8 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-zinc-950 dark:text-white">
-            Dashboard
+            Flow
           </h1>
-          <p className="text-zinc-500 dark:text-zinc-400">10-Q Report</p>
+
+          <div className="flex">
+            <div>
+              <p className="text-zinc-500 dark:text-zinc-400">Builder</p>
+            </div>
+            <div className="">
+              <SseComponent />
+            </div>
+          </div>
         </div>
       </header>
-
-      <button
-        type="button"
-        onClick={() => setIsModalOpen(true)}
-        className="bg-cyan-500 text-white py-2 px-4 rounded-lg hover:bg-cyan-600 dark:bg-cyan-400 dark:hover:bg-cyan-500"
-      >
-        New Project
-      </button>
 
       <ModalDialog
         isOpen={isModalOpen}
@@ -41,30 +41,8 @@ export default function HomeDashboard() {
       </ModalDialog>
 
       <section className="mt-8">
-        <SseComponent />
+        <PipelineDiagram />
       </section>
-
-      <section className="mt-8">
-        <ReportForm />
-      </section>
-
-      <section className="mt-8">
-        <SwitchList />
-      </section>
-
-      {/* Render data from the store if needed */}
-      {data[0] && (
-        <section className="mt-8">
-          <WordCloud wordData={data[0].wordCloud.slice(0, 100)} />
-        </section>
-      )}
-
-      {data[0] && (
-        <section className="mt-8">
-          <h2 className="text-white">{data[0].sectionName}</h2>
-          <p className="text-white">{data[0].summaryText}</p>
-        </section>
-      )}
     </div>
   );
 }

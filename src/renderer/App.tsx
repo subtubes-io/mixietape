@@ -5,6 +5,7 @@ import Toast from '@/components/custom/Toast';
 import HomeDashboard from '@/app/Dashboard';
 import ProjectsPage from '@/app/projects/ProjectsPage';
 import ProjectPage from '@/app/projects/ProjectPage';
+import FlowsPage from '@/app/flows/FlowPage';
 import './App.css';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
             <Route path="/" element={<HomeDashboard />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:id" element={<ProjectPage />} />
+            <Route path="/flows" element={<FlowsPage />} />
           </Routes>
         </ApplicationLayout>
       </Router>

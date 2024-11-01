@@ -52,6 +52,7 @@ function ApplicationLayout({ children }: { children: React.ReactNode }) {
             <SidebarSection>
               <SidebarItem to="/">Home</SidebarItem>
               <SidebarItem to="/projects">Projects</SidebarItem>
+              <SidebarItem to="/flows">Flows</SidebarItem>
             </SidebarSection>
             <SidebarSpacer />
           </SidebarBody>
